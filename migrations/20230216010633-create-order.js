@@ -9,14 +9,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
+      profileId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Profiles',
+          key: 'id'
+        }
       },
-      total: {
-        type: Sequelize.INTEGER
-      },
-      notes: {
-        type: Sequelize.TEXT
+      listingId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Listings',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

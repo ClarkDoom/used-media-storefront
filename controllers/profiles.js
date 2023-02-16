@@ -1,4 +1,4 @@
-const { Profile, Listing } = require("../models")
+const { Profile, Listing, Order } = require("../models")
 
 const create = async(req,res) => {
   try {
@@ -8,9 +8,17 @@ const create = async(req,res) => {
     res.status(500).json(error)
   }
 }
+
+//! why is Order showing up under Listing?
 const index = async(req,res) => {
   try {
-    const profiles = await Profile.findAll({ include: [{ all: true, nested: true }]})
+    const profiles = await Profile.findAll(
+      { 
+        include: [
+          { all: true, nested: true },
+        ]
+      }
+    )
     res.status(200).json(profiles)
   } catch (error) {
     res.status(500).json(error)
@@ -57,6 +65,17 @@ const addListing = async (req, res) => {
     res.status(500).json(error)
   }
 }
+const associateListing = async (req, res) => {
+  try {
+    const { profileId, listingId } = req.params
+    const association = await Order.create({
+      profileId: profileId, listingId: listingId
+    })
+    res.status(200).json(association)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 
 module.exports = {
@@ -64,5 +83,6 @@ module.exports = {
   index,
   update,
   delete: deleteProfile,
-  addListing
+  addListing,
+  associateListing
 }

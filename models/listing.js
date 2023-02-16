@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       Listing.belongsTo(models.Profile, {
         foreignKey: 'profileId'
       })
+      Listing.belongsToMany(models.Profile, {
+        as: 'profiles',
+        through: models.Order,
+        foreignKey: 'listingId'
+      })
     }
   }
   Listing.init({
