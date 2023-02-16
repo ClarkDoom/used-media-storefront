@@ -1,4 +1,4 @@
-const { Profile } = require("../models")
+const { Profile, Listing } = require("../models")
 
 const create = async(req,res) => {
   try {
@@ -10,7 +10,7 @@ const create = async(req,res) => {
 }
 const index = async(req,res) => {
   try {
-    const profiles = await Profile.findAll()
+    const profiles = await Profile.findAll({ include: [{ all: true, nested: true }]})
     res.status(200).json(profiles)
   } catch (error) {
     res.status(500).json(error)
@@ -47,11 +47,22 @@ const deleteProfile = async (req, res) => {
     res.status(500).json(error)
   }
 }
+const addListing = async (req, res) => {
+  try {
+    req.body.profileId = req.params.id
+    const listing = await Listing.create(req.body)
+    res.status(200).json(listing)
+
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 
 module.exports = {
   create,
   index,
   update,
-  delete: deleteProfile
+  delete: deleteProfile,
+  addListing
 }
